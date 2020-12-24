@@ -1,0 +1,6 @@
+; $Id$
+name = "Venue Detail"
+description = "Display information on a specific dinosaur friendly venue"
+core = 6.x
+php = 5.1
+package = DinoMaps

@@ -1,0 +1,6 @@
+; $Id$
+name = "Map Overview"
+description = "Display a map of dinosaur friendly venues"
+core = 6.x
+php = 5.1
+package = DinoMaps

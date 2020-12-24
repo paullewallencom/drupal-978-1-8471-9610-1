@@ -1,0 +1,73 @@
+<?php
+// $Id$
+
+/**
+ * Implementation of hook_install().
+ */
+function map_install() {
+  drupal_install_schema('map');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function map_uninstall() {
+  drupal_uninstall_schema('map');
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function map_schema() {
+  $schema['maps'] = array(
+    'fields' => array(
+      'vid' => array(
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE, 
+        'default' => 0
+      ),
+      'nid' => array(
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE, 
+        'default' => 0
+      ),
+      'longitude' => array(
+        'type' => 'float', 
+        'not null' => TRUE, 
+        'default' => 0
+      ),
+      'latitude' => array(
+        'type' => 'float', 
+        'not null' => TRUE, 
+        'default' => 0
+      ),
+      'zoom' => array(
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE, 
+        'default' => 0
+      ),
+      'width' => array(
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE, 
+        'default' => 0
+      ),
+      'height' => array(
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE, 
+        'default' => 0
+      ),
+      
+    ),
+    'indexes' => array(
+      'nid' => array('nid'),
+    ),
+    'primary key' => array('vid'), 
+  );
+
+  return $schema;
+}

@@ -1,0 +1,55 @@
+<?php
+// $Id$
+
+/**
+ * Implementation of hook_install().
+ */
+function venue_install() {
+  drupal_install_schema('venue');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function venue_uninstall() {
+  drupal_uninstall_schema('venue');
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function venue_schema() {
+  $schema['venues'] = array(
+    'fields' => array(
+      'vid' => array(
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE, 
+        'default' => 0
+      ),
+      'nid' => array(
+        'type' => 'int', 
+        'unsigned' => TRUE, 
+        'not null' => TRUE, 
+        'default' => 0
+      ),
+      'longitude' => array(
+        'type' => 'float', 
+        'not null' => TRUE, 
+        'default' => 0
+      ),
+      'latitude' => array(
+        'type' => 'float', 
+        'not null' => TRUE, 
+        'default' => 0
+      ),
+    ),
+    'indexes' => array(
+      'nid' => array('nid'),
+    ),
+    'primary key' => array('vid'), 
+  );
+
+  return $schema;
+}
+

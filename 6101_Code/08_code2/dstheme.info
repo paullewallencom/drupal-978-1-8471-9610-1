@@ -1,0 +1,6 @@
+name = dstheme
+description = Theme for the dinospace website
+version = 1
+core = 6.x
+engine = phptemplate
+stylesheets[all][] = ds.css

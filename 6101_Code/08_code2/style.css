@@ -1,0 +1,111 @@
+/* peacockcarter.co.uk 2006 - 2009 [ds] */
+/* Reset */
+address, caption, cite, code, dfn, th{font-style:normal; font-weight:normal}
+abbr, acronym{border:0}
+body, html{margin: 0; padding: 0;}
+blockquote, body, div, dl, dt, dd, fieldset, form, h1, h2, h3, h4, h5, h6, input, li, ol, ul, p, pre, textarea, td, th{margin:0; padding:0}
+caption, th{text-align:left}
+h1, h2, h3, h4, h5, h6, p, pre, blockquote{background:transparent; font-weight:normal; word-spacing:0px}
+fieldset, img{border:0}
+table{border-collapse:collapse; border-spacing:0; clear:both; margin:10px; width: 525px !important}
+/* Generic */
+a, a:active, a:link,a:visited{background:transparent; color: #000; font-weight: bold;text-decoration:underline}
+a:hover{color:#2266BB; text-decoration: none}
+abbr, acronym, dfn{border-bottom-width:1px; border-bottom-style:dotted; cursor:help}
+address{color:#000; font-size:0.7em; line-height:1.8em}
+blockquote {}
+body{background: #FFF;color:#000; font-family: arial, verdana, helvetica,sans-serif; font-size: 62.5%;}
+caption{font-size:0.8em; font-weight:bold}
+em{font-style:italic}
+.float_left{float:left !important}
+.float_none{float:none !important}
+.float_right{float:right !important}
+.clear{clear: both !important}
+.hide {display: none !important}
+#nav,h1,h2,h3,h4,h5,h6 {font-family: verdana, sans-serif}
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a, h1 acronym, h1 abbr{border-bottom-width:0px !important; text-decoration: none !important}
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover{text-decoration: underline !important}
+h1{color: #2266BB;font-size:250%;letter-spacing:0; line-height:110%;margin: 0;padding: 0}
+h2 {color:#555; font-size: 200%;font-weight:bold; letter-spacing:0; line-height:150%}
+h3{color:#666; font-size:175%; font-weight:bold; letter-spacing:1px;line-height:100%;margin-top: 5px}
+h4, h5, h6{color:#555; font-size:1.1em; font-weight:bold; letter-spacing:1px;line-height:1.5em;margin-top: 5px}
+h2 a, h3 a {color: #555 !important; font-weight: inherit !important;}
+p, address {text-align:justify}
+ul{list-style-type:square}
+strong{font-weight:bold}
+caption{display: none}
+th, td {padding: 5px}
+th {background: #2266BB;color: #FFF;font-weight: bold}
+td {color: #555}
+/* Layout */
+#wrapper {
+background: #FFF;
+margin: 25px auto 0 auto;
+padding: 0 0 75px 0;
+width: 800px
+}
+#logo {}
+#header {color: #000;height: 80px}
+
+#nav {
+float: left;
+font-size: 100%;
+height: 52px;	
+}
+	#nav ul {
+	list-style-type: none;
+	}
+	#nav li a {
+	color: #330033;
+	display: block;
+	font-weight: bold;
+	padding: 2px 5px;
+	text-decoration: none;
+	width: 210px;
+	}
+		#nav li a:hover {
+		color: #2266BB;
+		}
+	ul ul {
+	font-size: 75%;
+	margin-left: 0 !important;	
+	padding-left: 25px !important;
+	}
+	ul ul li {border-bottom: 2px #FFF dotted;}
+	ul ul li a {margin-left: 0 !important;width: 175px !important}
+	
+.block { margin-left: 25px; padding-left: 5px; border: 1px solid #2266BB; }	
+.block h2 {color:#555; font-size: 120%;font-weight:bold; letter-spacing:0; line-height:150%}
+/* Main */
+#main {clear: both;font-size: 120%}
+	#main p, #main ul, #main dl, #main ol {
+	font-weight: normal;
+	line-height: 135%;
+	margin: 10px 0;	
+	}
+	#main-content img {float: right;margin: 5px 0 5px 10px}
+	#main ul, #main dl, #main ol {margin-left: 25px}
+#main-content {
+float: left;
+width: 475px
+}
+	#content {background: #FFF;padding: 10px 25px}
+#column {
+background: transparent;
+float: left;
+padding: 10px;
+width: 250px;
+}
+	#column p {font-size: 90%;text-align: left}
+	#column img {float: right}
+#footer {
+background: #FFF;
+clear: both;
+color: #CCC;
+font-size: 90%;
+height: 105px;
+padding: 5px 10px 0 10px
+}
+	#footer p {padding: 0 100px 0 25px}
+	#footer a {color: #CCC}
+	#footer a:hover {color: #CCC}

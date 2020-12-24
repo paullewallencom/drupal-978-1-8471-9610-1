@@ -1,0 +1,253 @@
+<?php
+// $Id$
+/**
+ * @file
+ * Module for map
+ */
+	/**
+	* Implementation of hook_help().
+	*/
+	function map_help($path, $arg) {
+		if( $path == 'admin/help#map' )	{
+			$txt = 'This module displays the map of venues page.  It assumes the existence of a content type named map';
+		}
+		
+		return '<p>' . $txt . '</p>';
+	}	
+	
+	
+	function map_node_info() {		
+		return array(
+			'map' => array(
+				'name' => t('Map Details'),
+				'module' => 'map',
+				'description' => t('A map of venues page.'),
+				'has_title' => TRUE,
+				'title_label' => t('Map Name'),
+				'has_body' => TRUE,
+				'body_label' => t('Map body'),
+			)
+		);
+	}
+	
+	
+	function map_form(&$node)	{
+		
+		$type = node_get_types( 'type', $node );
+		if($type->has_title)	{
+			$form['title'] = array(
+				'#type' => 'textfield',
+				'#title' => check_plain( $type->title_label),
+				'#required' =>TRUE,
+				'#default_value' => $node->title,
+				'#weight' => -5,
+			);	
+		}
+		if($type->has_body) {
+			$form['body_field'] = node_body_field(
+				$node,
+				$type->body_label,
+				$type->min_word_count
+			);	
+		}
+		
+	
+		$form['longitude'] = array(
+			'#type' => 'textfield',
+			'#title' => t('Central point longitude'),
+			'#required' =>TRUE,
+			'#default_value' => 0,
+		);
+		
+		$form['latitude'] = array(
+			'#type' => 'textfield',
+			'#title' => t('Central point latitude'),
+			'#required' =>TRUE,
+			'#default_value' => 0,
+		);
+		
+		$form['zoom'] = array(
+			'#type' => 'textfield',
+			'#title' => t('Zoom Level'),
+			'#required' =>TRUE,
+			'#default_value' => 0,
+		);
+		
+		$form['width'] = array(
+			'#type' => 'textfield',
+			'#title' => t('Map Width'),
+			'#required' =>TRUE,
+			'#default_value' => 0,
+		);
+		
+		$form['height'] = array(
+			'#type' => 'textfield',
+			'#title' => t('Map Height'),
+			'#required' =>TRUE,
+			'#default_value' => 0,
+		);
+		
+	
+		return $form;
+	}
+
+	
+	
+	/**
+	 * Insert hook for when new maps are added. 
+	 */
+	function map_insert($node) {
+		
+		// Insert the custom data in $node into the map table.
+
+				
+			
+	$sql = sprintf(
+			'INSERT INTO {maps} (nid, longitude, latitude, zoom, width, height) ' .
+			"VALUES (%d, '%s', '%s', '%s', '%s', '%s' )",
+			$node->nid,
+			$node->longitude,
+			$node->latitude,
+			$node->zoom,
+			$node->width,
+			$node->height);
+		 
+			db_query($sql);
+		// maybe: menu_link_save?
+	}
+	
+	/**
+	 * Implementation of hook_update, for when a map node is updated.
+	 */
+	 function map_update($node)	 {
+		 if ($node->revision)
+		 {
+			map_insert($node);	 
+		 }
+		 else
+		 {
+			 db_query(
+			 	"UPDATE {maps} " .
+			 	"SET longitude = '%s', latitude = '%s', zoom = '%s', width = '%s',  height = '%s' " .
+			 	"WHERE nid = %d",
+			 	$node->longitude,
+			 	$node->latitude,
+			 	$node->zoom,
+			 	$node->width,
+			 	$node->height,
+			 	$node->nid
+			 );
+		 }
+	 }
+	
+	/**
+	 * Implementation of hook_delete, for when a map node is deleted.
+	 */
+	function map_delete($node) {
+		db_query(
+			"DELETE FROM {maps} WHERE nid = %d",
+			$node->nid
+		);			
+	}
+	
+	/**
+	 * Implementation of hook_nodeapi, for when individual revisions need to be deleted.
+	 */
+	 function map_nodeapi(&$node, $op, $teaser, $page) {
+		if ($op == "delete revision")
+		{
+			db_query(
+				"DELETE FROM (maps) WHERE nid = %d",
+				$node->nid
+			);
+		}
+	 }
+	 
+	
+	/**
+	 * Implementation of hook_load for our custom data.
+	 */  	
+	function map_load($node) {
+
+		
+        $sql = sprintf(
+        	"SELECT longitude, latitude, zoom, width, height " .
+			"FROM {maps} WHERE nid = %d",
+			$node->nid);
+        $result = db_query($sql); 
+		$obj = db_fetch_object($result);		
+		
+		return $obj;
+        
+	}
+	
+	/**
+	 * Implementation of hook_view for our custom data
+	 */
+	function map_view($node, $teaser = FALSE, $page = FALSE) {
+		$node = node_prepare($node, $teaser);
+		drupal_set_html_head("<script src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAlgDdVLfedJKmiafQpRNLlBT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSA_UGnl6s1KwwqtBqkEFeipPiv2g\" type=\"text/javascript\"></script>");
+		$mapjs = "    <script type=\"text/javascript\">
+						 
+   						 //<![CDATA[
+
+    function load() {
+      if (GBrowserIsCompatible()) {
+        var map = new GMap2(document.getElementById(\"map\"));
+        map.setCenter(new GLatLng(".$node->latitude.", ".$node->longitude."), ".$node->zoom.");
+        
+        function createMarker(latlng, nid) {
+      		var marker = new GMarker(latlng);
+      		marker.value = nid;
+     		GEvent.addListener(marker,\"click\", function() {
+        		window.location = 'http://localhost/drupal-6.9/node/' + nid
+      		});
+      		return marker;
+	}";
+		$node->venues = array();
+		$result = db_query("SELECT nid, longitude, latitude FROM {venues}");
+		while ($venue = db_fetch_object($result))
+		{
+			$node->venue[] = array( 'nid' => $venue->nid, 'longitude' => $venue->longitude, 'latitude' => $venue->latitude );
+			$mapjs .= "var latlng = new GLatLng(" . $venue->latitude .", ".$venue->longitude.");
+		map.addOverlay(createMarker(latlng, ".$venue->nid."));";
+		}
+		
+		$mapjs .= " }
+    }
+
+    //]]>
+    
+    window.onload = function () {
+	load();
+		}
+		window.unload = function () {
+GUnload();
+}
+    </script>";
+   
+    
+		drupal_set_html_head( $mapjs );
+			
+		return $node;
+	}
+	
+	function map_perm() {
+		return array(
+			'create map node',
+			'edit map nodes',
+			'delete map nodes',
+		);
+	}
+	
+	function map_access($op, $node, $account) {
+		switch( $op )
+		{
+			case 'create':
+				return user_access('create map node', $account );
+			case 'update':
+				return user_access('edit map nodes', $account );
+			case 'delete':
+				return user_access('delete map nodes', $account );		
+		}
+	}
